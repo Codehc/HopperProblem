@@ -28,7 +28,7 @@ int hp::getDirection(unsigned int distance) {
     return randomNum <= threshold;
 }
 
-double hp::probabilityCalc(unsigned int direction, unsigned int distance) {
+double hp::calcMovementProbability(unsigned int direction, unsigned int distance) {
     if (direction == 1) {
         return pow(2.0, distance) / (1 + pow(2.0, distance));
     } else if (direction == -1) {
@@ -38,7 +38,7 @@ double hp::probabilityCalc(unsigned int direction, unsigned int distance) {
     }
 }
 
-std::tuple<long long, long long> hp::probabilityCalcSplit(unsigned int direction, unsigned int distance) {
+std::tuple<long long, long long> hp::calcMovementProbabilityFrac(unsigned int direction, unsigned int distance) {
     if (direction == 1) {
         return std::make_tuple(pow(2ll, distance), (1ll + pow(2ll, distance)));
     } else if (direction == -1) {
@@ -52,8 +52,8 @@ std::tuple<long long, long long> hp::solveForPathProbability(std::vector<int> pa
     unsigned int distance = 0;
     std::tuple<long long, long long> probability = std::tuple(1, 1);
 
-    for (int & direction : path) {
-        std::tuple<long long, long long> calc = hp::probabilityCalcSplit(direction, distance);
+    for (const int & direction : path) {
+        std::tuple<long long, long long> calc = hp::calcMovementProbabilityFrac(direction, distance);
         std::get<0>(probability) *= std::get<0>(calc);
         std::get<1>(probability) *= std::get<1>(calc);
 
@@ -107,8 +107,37 @@ void hp::solveForProbabilities(std::string inputFileName, std::string outputFile
 }
 
 std::tuple<long long, long long> hp::simplifyFraction(std::tuple<long long, long long> fraction) {
-    int numerator = std::get<0>(fraction);
-    int denominator = std::get<1>(fraction);
-    int gcd = std::gcd(numerator, denominator);
+    long long numerator = std::get<0>(fraction);
+    long long denominator = std::get<1>(fraction);
+    long long gcd = std::gcd(numerator, denominator);
     return std::make_tuple(numerator / gcd, denominator / gcd);
+}
+
+std::vector<std::vector<int>> hp::pathToMatrix(std::vector<int> path) {
+    std::vector<std::vector<int>> pathMatrix;
+
+    unsigned int distance = 0;
+
+    for (const int & direction : path) {
+        if (pathMatrix.size() < distance + 1) {
+            std::vector<int> emptyDistance = {0, 0};
+            pathMatrix.push_back(emptyDistance);
+        }
+        int index = direction == 1 ? 0 : 1;
+
+        pathMatrix[distance][index] ++;
+
+        distance += direction;
+    }
+
+    return pathMatrix;
+}
+
+void hp::printMatrix(const std::vector<std::vector<int>> &matrix) {
+    for (const auto& row : matrix) {
+        for (const auto& element : row) {
+            std::cout << element << " ";
+        }
+        std::cout << std::endl;
+    }
 }

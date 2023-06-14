@@ -25,5 +25,10 @@ public:
     bool isDone() const;
 };
 
+namespace hp {
+    void multithreadSimulation(int threadsNum);
+    void runHopperProblem(int id);
+}
+
 
 #endif //HOPPER_PROBLEM_SIM_ITERATIVESIMULATION_H
