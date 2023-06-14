@@ -23,7 +23,7 @@ void IterativeSimulation::iterate() {
 
     iteration++;
 
-    if (hp::getDirection(distance) == AWAY) {
+    if (hp::getDirection(distance) == FURTHER) {
         distance++;
     } else {
         distance--;

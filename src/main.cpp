@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <thread>
+#include "hp.h"
 #include "IterativeSimulation.h"
 
 std::mutex mtx;
@@ -30,7 +31,11 @@ void runHopperProblem(int id) {
 }
 
 int main() {
-    const int numThreads = 1000;
+
+    //hp::solveForProbabilities("../res/marshall_requested_paths.txt", "../res/probabilities.txt");
+    hp::solveForProbabilities("../res/possible_paths.txt", "../res/probabilities.txt");
+
+    /*const int numThreads = 1000;
     std::thread threads[numThreads];
 
     // Create and start the threads
@@ -54,7 +59,7 @@ int main() {
         std::cout << "Sim ID " << simulation->getID() << " max distance achieved was " << simulation->getMaxDistance() << ". Took " << simulation->getIteration() << " iterations" << std::endl;
     }
 
-    std::cout << "Average iterations: " << totalIterations / (double) iterativeSimulations.size() << "   Average max distance: " << totalDistance / (double) iterativeSimulations.size() << std::endl;
+    std::cout << "Average iterations: " << totalIterations / (double) iterativeSimulations.size() << "   Average max distance: " << totalDistance / (double) iterativeSimulations.size() << std::endl;*/
 
     return 0;
 }

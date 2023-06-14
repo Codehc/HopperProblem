@@ -93,6 +93,8 @@ out/
 # logs
 logs/
 
+res/paths/
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
