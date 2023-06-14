@@ -11,11 +11,11 @@
 
 namespace hp {
 
-    class PossiblePathsSimulation {
-        unsigned int distance;
-    public:
-        void calcuate();
-    };
+  class PossiblePathsSimulation {
+    unsigned int distance;
+  public:
+    void calcuate();
+  };
 
 } // hp
 

@@ -90,11 +90,6 @@ cmake-build-*/
 # IntelliJ
 out/
 
-# logs
-logs/
-
-res/paths/
-
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
@@ -179,3 +174,15 @@ Temporary Items
 *.icloud
 
 # End of https://www.toptal.com/developers/gitignore/api/clion+all,cmake,c++,macos
+
+# logs
+logs/
+
+res/paths/
+
+# LaTeX build files
+paper/*.aux
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.synctex.gz

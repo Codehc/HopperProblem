@@ -18,15 +18,21 @@ public:
     IterativeSimulation(unsigned int id);
 
     void iterate();
+
     unsigned int getID() const;
+
     unsigned int getDistance() const;
+
     unsigned int getMaxDistance() const;
+
     unsigned int getIteration() const;
+
     bool isDone() const;
 };
 
 namespace hp {
     void multithreadSimulation(int threadsNum);
+
     void runHopperProblem(int id);
 }
 

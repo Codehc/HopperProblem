@@ -13,131 +13,131 @@
 #include <tuple>
 
 int hp::getDirection(unsigned int distance) {
-    if (distance == 0) {
-        return FURTHER;
-    }
+  if (distance == 0) {
+    return FURTHER;
+  }
 
-    std::random_device rd;
-    std::mt19937 engine(rd());
-    std::uniform_real_distribution<double> dist(0, 1);
-    double randomNum = dist(engine);
+  std::random_device rd;
+  std::mt19937 engine(rd());
+  std::uniform_real_distribution<double> dist(0, 1);
+  double randomNum = dist(engine);
 
-    double threshold = pow(2.0, distance);
-    threshold = (threshold) / (1 + threshold);
-    // 1 is closer, 0 is away
-    return randomNum <= threshold;
+  double threshold = pow(2.0, distance);
+  threshold = (threshold) / (1 + threshold);
+  // 1 is closer, 0 is away
+  return randomNum <= threshold;
 }
 
 double hp::calcMovementProbability(unsigned int direction, unsigned int distance) {
-    if (direction == 1) {
-        return pow(2.0, distance) / (1 + pow(2.0, distance));
-    } else if (direction == -1) {
-        return 1 / (1 + pow(2.0, distance));
-    } else {
-        return 0;
-    }
+  if (direction == 1) {
+    return pow(2.0, distance) / (1 + pow(2.0, distance));
+  } else if (direction == -1) {
+    return 1 / (1 + pow(2.0, distance));
+  } else {
+    return 0;
+  }
 }
 
 std::tuple<long long, long long> hp::calcMovementProbabilityFrac(unsigned int direction, unsigned int distance) {
-    if (direction == 1) {
-        return std::make_tuple(pow(2ll, distance), (1ll + pow(2ll, distance)));
-    } else if (direction == -1) {
-        return std::make_tuple(1ll, (1ll + pow(2ll, distance)));
-    } else {
-        return std::make_tuple(0ll, 1ll);
-    }
+  if (direction == 1) {
+    return std::make_tuple(pow(2ll, distance), (1ll + pow(2ll, distance)));
+  } else if (direction == -1) {
+    return std::make_tuple(1ll, (1ll + pow(2ll, distance)));
+  } else {
+    return std::make_tuple(0ll, 1ll);
+  }
 }
 
 std::tuple<long long, long long> hp::solveForPathProbability(std::vector<int> path) {
-    unsigned int distance = 0;
-    std::tuple<long long, long long> probability = std::tuple(1, 1);
+  unsigned int distance = 0;
+  std::tuple<long long, long long> probability = std::tuple(1, 1);
 
-    for (const int & direction : path) {
-        std::tuple<long long, long long> calc = hp::calcMovementProbabilityFrac(direction, distance);
-        std::get<0>(probability) *= std::get<0>(calc);
-        std::get<1>(probability) *= std::get<1>(calc);
+  for (const int &direction: path) {
+    std::tuple<long long, long long> calc = hp::calcMovementProbabilityFrac(direction, distance);
+    std::get<0>(probability) *= std::get<0>(calc);
+    std::get<1>(probability) *= std::get<1>(calc);
 
-        probability = hp::simplifyFraction(probability);
+    probability = hp::simplifyFraction(probability);
 
-        distance += direction;
-    }
+    distance += direction;
+  }
 
-    return probability;
+  return probability;
 }
 
 
 void hp::solveForProbabilities(std::string inputFileName, std::string outputFileName) {
-    // Note input file has to have these criteria
-    //   * Spaces before every line
-    //   * 1 or -1 seperated by spaces to separate paths
+  // Note input file has to have these criteria
+  //   * Spaces before every line
+  //   * 1 or -1 seperated by spaces to separate paths
 
-    std::ifstream inputFile(inputFileName);
-    std::ofstream outputFile(outputFileName);
+  std::ifstream inputFile(inputFileName);
+  std::ofstream outputFile(outputFileName);
 
-    if (inputFile.is_open() && outputFile.is_open()) {
-        std::string line;
+  if (inputFile.is_open() && outputFile.is_open()) {
+    std::string line;
 
-        while (std::getline(inputFile, line)) {
-            // Process the line here
-            std::vector<int> path;
+    while (std::getline(inputFile, line)) {
+      // Process the line here
+      std::vector<int> path;
 
-            std::stringstream ss(line);
-            std::string token;
+      std::stringstream ss(line);
+      std::string token;
 
-            while (std::getline(ss, token, ' ')) {
-                // Process each token (substring) here
-                std::stringstream tokenStream(token);
-                int direction;
-                ss >> direction;
+      while (std::getline(ss, token, ' ')) {
+        // Process each token (substring) here
+        std::stringstream tokenStream(token);
+        int direction;
+        ss >> direction;
 
-                path.push_back(direction);
-            }
+        path.push_back(direction);
+      }
 
-            std::tuple<long long, long long> probability = hp::solveForPathProbability(path);
+      std::tuple<long long, long long> probability = hp::solveForPathProbability(path);
 
-            std::cout << line << ": " << std::get<0>(probability) << " / " << std::get<1>(probability) << std::endl;
-            outputFile << line << ": " << std::get<0>(probability) << " / " << std::get<1>(probability) << std::endl;
-        }
-
-        inputFile.close();
-        outputFile.close();
-    } else {
-        std::cout << "Unable to open one of the two files" << std::endl;
+      std::cout << line << ": " << std::get<0>(probability) << " / " << std::get<1>(probability) << std::endl;
+      outputFile << line << ": " << std::get<0>(probability) << " / " << std::get<1>(probability) << std::endl;
     }
+
+    inputFile.close();
+    outputFile.close();
+  } else {
+    std::cout << "Unable to open one of the two files" << std::endl;
+  }
 }
 
 std::tuple<long long, long long> hp::simplifyFraction(std::tuple<long long, long long> fraction) {
-    long long numerator = std::get<0>(fraction);
-    long long denominator = std::get<1>(fraction);
-    long long gcd = std::gcd(numerator, denominator);
-    return std::make_tuple(numerator / gcd, denominator / gcd);
+  long long numerator = std::get<0>(fraction);
+  long long denominator = std::get<1>(fraction);
+  long long gcd = std::gcd(numerator, denominator);
+  return std::make_tuple(numerator / gcd, denominator / gcd);
 }
 
 std::vector<std::vector<int>> hp::pathToMatrix(std::vector<int> path) {
-    std::vector<std::vector<int>> pathMatrix;
+  std::vector<std::vector<int>> pathMatrix;
 
-    unsigned int distance = 0;
+  unsigned int distance = 0;
 
-    for (const int & direction : path) {
-        if (pathMatrix.size() < distance + 1) {
-            std::vector<int> emptyDistance = {0, 0};
-            pathMatrix.push_back(emptyDistance);
-        }
-        int index = direction == 1 ? 0 : 1;
-
-        pathMatrix[distance][index] ++;
-
-        distance += direction;
+  for (const int &direction: path) {
+    if (pathMatrix.size() < distance + 1) {
+      std::vector<int> emptyDistance = {0, 0};
+      pathMatrix.push_back(emptyDistance);
     }
+    int index = direction == 1 ? 0 : 1;
 
-    return pathMatrix;
+    pathMatrix[distance][index]++;
+
+    distance += direction;
+  }
+
+  return pathMatrix;
 }
 
 void hp::printMatrix(const std::vector<std::vector<int>> &matrix) {
-    for (const auto& row : matrix) {
-        for (const auto& element : row) {
-            std::cout << element << " ";
-        }
-        std::cout << std::endl;
+  for (const auto &row: matrix) {
+    for (const auto &element: row) {
+      std::cout << element << " ";
     }
+    std::cout << std::endl;
+  }
 }
