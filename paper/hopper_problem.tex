@@ -13,14 +13,12 @@
 \maketitle
 
 \section{Assumptions}
+
 All matrices and vectors are 1-indexed. $\odot$ represents element-wise operations. Element-wise exponentiation of matrices represents raising the power of every element in a matrix to the corresponding element in the power matrix.
 
 \section{The Hopper Problem}
 
-\textbf{NOTE THIS PARAGRAPH IS NOT CORRECT IGNORE THIS PART FOR NOW} You have $n$ hoppers with a ball each. Every iteration, a random ball is selected. The hopper containing that ball doesn't change. Every other hopper doubles the amount of balls it has. On average, how long will it take for each hopper to have an equal amount of balls again?
-\\
-\\
-\textbf{This part is fine:} A particle starts at the origin. At every distance from the origin, $d$, its chance of coming towards the origin is $\frac{2^d}{1+2^d}$ and its chance of moving away from the origin is $1-\frac{2^d}{1+2^d}$. On average, how many iterations, where at each iteration it moves either towards or away from the origin, does it take to get back to the origin?
+A particle starts at the origin. Its chances of moving towards the origin are defined by the function $\frac{2^d}{1+2^d}$ where $d$ is the particles distance from the origin. Its chances of moving away from the origin are defined by the function $frac{1}{1+2^d}$. How many moves on average will it take for the particle to come back to the origin. 
 
 \section{Path Representation}
 
@@ -103,11 +101,11 @@ this:
 	\end{bmatrix}
 	_{m{\times}1}
 \end{align*}
-$1{\times}m$ being the number of rows and columns in the vector. Once again, where \textit{m} is the maximum distance from the origin. It follows that the vector for the probability of moving away from the origin can be defined like this:
+$m{\times}1$ being the number of rows and columns in the vector. Once again, where \textit{m} is the maximum distance from the origin. It follows that the vector for the probability of moving away from the origin can be defined like this:
 \begin{align*}
 	P_{away}=
 	\begin{bmatrix}
-		1- \frac{2^{i-1}}{1+2^{i-1}}
+		\frac{1}{1+2^{i-1}}
 	\end{bmatrix}
 	_{m{\times}1}
 \end{align*}
@@ -128,8 +126,8 @@ Expanded, these vectors look like this:
 
 In order to find the probability of a given path, the path matrix, $W$, is
 split into two submatrices. One submatrix, $C$, holds the number of movements
-away from the origin and their distances from the origin and the other, $A$,
-holds the number of movements towards the origin and their distances from the
+towards the origin and their distances from the origin and the other, $A$,
+holds the number of movements away from the origin and their distances from the
 origin. The probability matrix for moving towards the origin is then raised to
 the power of $C$ using element-wise exponentiation, otherwise known as Hadamard
 exponentiation, denoted by $\odot$. The product of the elements in the

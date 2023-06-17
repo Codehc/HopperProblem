@@ -80,6 +80,7 @@
 
 # CMake
 cmake-build-*/
+buid/
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
